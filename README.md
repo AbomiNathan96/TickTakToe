@@ -1,2 +1,2 @@
 # TickTakToe
-###ticktaktoe robot
+ticktaktoe robot
