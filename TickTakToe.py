@@ -32,84 +32,95 @@ def checkwin(G): #this is the code for checking a outcomes, I hate it
         Game = 2
     return(Game)
 
-f = open('games.txt')
-Games = f.readlines()# theese are the games i stored
-f.close()
-
-f = open('outcomes.txt')# theses are the outcomes of the games
-outcomes = f.readlines()
-f.close()
-
-Game = ""#🕶
-Turn = 0#🕶 # the coolest variable setup you have ever seen
-Playing = 0#🕶
-
-Playing = display(Game) #this spawns the ...'s
-while Playing == 0 and Turn < 9:# this ends the game
+def PLAYGAME():#to reaply a game
+    f = open('games.txt')
+    Games = f.readlines()# theese are the games i stored
+    f.close()
     
-    Game += input()# litterally all of the code for your turn
-    Turn = Turn + 1
-
-    #you ^ vs the guy she tells you not to worry about v
-
-    temp = []
-    temp2 = []
-    for I in range(len(Games)):
-        if Games[I][0:Turn] == Game:
-            temp = temp + [Games[I]] #this trims the selection of games to only allow the ones that branch off the current one
-            temp2 = temp2 + [outcomes[I]]
-    Games = temp
-    outcomes = temp2
-
-
-
-    Wins = []# this is for mem stuff
-    for i in range(9):
-        WL = [0,1,0]
+    f = open('outcomes.txt')# theses are the outcomes of the games
+    outcomes = f.readlines()
+    f.close()
+    
+    Game = ""#🕶
+    Turn = 0#🕶 # the coolest variable setup you have ever seen
+    Playing = 0#🕶
+    
+    Playing = display(Game) #this spawns the ...'s
+    while Playing == 0 and Turn < 9:# this ends the game
+        
+        Game += input()# litterally all of the code for your turn
+        Turn = Turn + 1
+        Playing = display(Game)
+        #you ^ vs the guy she tells you not to worry about v
+    
+        temp = []
+        temp2 = []
         for I in range(len(Games)):
-            if Games[I][Turn] == str(i):
-                if int(outcomes[I]) == 2:
-                    WL[0] = WL[0]+1
-                elif int(outcomes[I]) == 1:#this part counts all the wins losses and stalemates that could happen
-                    WL[1] = WL[1]+1
-                elif int(outcomes[I]) == 0:
-                    WL[2] = WL[2]+1
+            if Games[I][0:Turn] == Game:
+                temp = temp + [Games[I]] #this trims the selection of games to only allow the ones that branch off the current one
+                temp2 = temp2 + [outcomes[I]]
+        Games = temp
+        outcomes = temp2
+    
+    
+    
+        Wins = []# this is for mem stuff
+        for i in range(9):
+            WL = [0,1,0,0]
+            for I in range(len(Games)):
+                if Games[I][Turn] == str(i):
+                    WL[3] = Games[I][Turn]
+                    if int(outcomes[I]) == 2:
+                        WL[0] = WL[0]+1
+                    elif int(outcomes[I]) == 1:#this part counts all the wins losses and stalemates that could happen
+                        WL[1] = WL[1]+1
+                    elif int(outcomes[I]) == 0:
+                        WL[2] = WL[2]+1
+    
+            if WL[0] == 0:
+                print(WL[0],WL[1],WL[2],WL[2]/WL[1],WL[3]) #if there are no ways to outcomes, treat a stalemate as a outcomes
+                Wins += [WL[2]+WL[0]]
+            else:
+                print(WL[0],WL[1],WL[2],WL[0]/(WL[1]*2),WL[3])
+                Wins += [WL[2]+WL[0]]
+    
+    
+    
+        temp = []
+        for wow in range(9):
+            temp = temp + [Wins[wow]] # this part copys the Wins list, but if i did temp = Wins, the they would refrence the same object so when i sorted it with .sort() both would have been sorted
+        temp.sort(reverse=True) 
+        EGG = 0
+        EG = ''
+    
+        for i in Wins:
+            if temp[0] == i:
+                EG = str(EGG)
+                break # this part chooses the best move
+            EGG += 1
+        if temp[0] != 0:# i  need this so that when all moves suck it wont just steal the 0 spot
+            Game = Game + EG
+    
+        Turn += 1
+        Playing = display(Game)
+    
+    display(Game)
+    
+    
+    match Playing:
+        case 0:
+            print("Stalemate!")
+        case 2:
+            print("Lose!") #prints the end of the game
+        case 1:
+            print("Win!")
+    if (input('\n\n Replay? Y/N').lower() == 'y' ):
+        print('\nhave "fun"\n')
+        PLAYGAME()
+    else:
+        print('\n\n\nyou made the right choice')
+        return "its finnaly over"
 
-        if WL[0] == 0:
-            print(WL[0],WL[1],WL[2],WL[2]/WL[1]) #if there are no ways to outcomes, treat a stalemate as a outcomes
-            Wins += [WL[2]/WL[1]]
-        else:
-            print(WL[0],WL[1],WL[2],WL[0]/(WL[1]*2))
-            Wins += [WL[0]/(WL[1]**2)]
 
-
-
-    temp = []
-    for wow in range(9):
-        temp = temp + [Wins[wow]] # this part copys the Wins list, but if i did temp = Wins, the they would refrence the same object so when i sorted it with .sort() both would have been sorted
-    temp.sort(reverse=True) 
-    EGG = 0
-    EG = ''
-
-    for i in Wins:
-        if temp[0] == i:
-            EG = str(EGG)
-            break # this part chooses the best move
-        EGG += 1
-    if temp[0] != 0:# i  need this so that when all moves suck it wont just steal the 0 spot
-        Game = Game + EG
-
-    Turn += 1
-    Playing = display(Game)
-
-display(Game)
-
-
-match Playing:
-    case 0:
-        print("Stalemate!")
-    case 2:
-        print("Lose!") #prints the end of the game
-    case 1:
-        print("Win!")
-input()
+print("Soz m8 dev here, due to a bug you can steal the bot's spaces so... dont\n\n")
+PLAYGAME() #LET THE GAMES....    BEGIN!
