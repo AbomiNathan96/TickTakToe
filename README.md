@@ -23,3 +23,5 @@ so if you count up and remove all the 9's and double digits then you all the gam
 then run all the games to get the outcome and bam all the games stored
 
 then just use that data to only do the best moves
+
+if you find a way to win add to inssues please give all the terminal
